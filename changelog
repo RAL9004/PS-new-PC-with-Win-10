@@ -1,0 +1,9 @@
+*** Version 1 ***
+Date:         23. Mai 2017
+Description:  
+              Three Files:
+              Part1-prepare.ps1             /Windows preparation - uninstall Scrapware / Apps 
+              Part2-package-chocolatey.ps1  /With Packery Chocolatey install Apps
+              Part3-settings.ps1            /Windows Configuration 
+*******************              
+
