@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Erstes Skript zur Installation eines neuen Windows Computer
 .DESCRIPTION
@@ -17,23 +17,43 @@
 #>
 
 #Modul zum restarten des Skriptes mit Admin Berechtigungen
-$identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-$princ = New-Object System.Security.Principal.WindowsPrincipal($identity)
-if(!$princ.IsInRole( `
-  [System.Security.Principal.WindowsBuiltInRole]::Administrator))
-  {
-  $powershell = [System.Diagnostics.Process]::GetCurrentProcess()
-  $psi = New-Object System.Diagnostics.ProcessStartInfo $powerShell.Path
-  $script = $MyInvocation.MyCommand.Path
-  $prm = $script
- foreach($a in $args) {
-    $prm += ' ' + $a
- }
- $psi.Arguments = $prm
- $psi.Verb = "runas"
- [System.Diagnostics.Process]::Start($psi) | Out-Null
- return;
- }
+#kopiert aus dem Blog von Christian Jäckle
+#https://blog.christianjaeckle.de/powershell-skript-nochmal-mit-admin-rechten-ausfuehren/
+# Identität und Eigentümer ermitteln
+$objIdentity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+$objSecPrinc = New-Object System.Security.Principal.WindowsPrincipal($objIdentity)
+ 
+# Auf Administrator-Rechte prüfen
+if(!$objSecPrinc.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator))
+{
+	# Prozesse ermitteln
+  $objProcesses = [System.Diagnostics.Process]::GetCurrentProcess()
+	
+	# Neuen Prozess-Intanz erzeugen
+  $objProcInfos = New-Object System.Diagnostics.ProcessStartInfo $objProcesses.Path
+	
+	# Skript ermitteln
+  $ThisScript = $MyInvocation.MyCommand.Path
+	
+	# Übergabeparamter ermitteln
+  $strParameter = $ThisScript
+	
+  foreach($strArgument in $args) {
+    $strParameter += ' ' + $strArgument
+  }
+	
+	# Übergabeparamter dem neuen Prozess übergeben
+  $objProcInfos.Arguments = $strParameter
+	
+	# Neuen Prozess ausführen
+  $objProcInfos.Verb = "runas"
+	[System.Diagnostics.Process]::Start($objProcInfos) | Out-Null
+	
+  return;
+}
+ . 
+# Adminrechte sind vorhanden
+Write-Host "Du hast Administratorenrechte. Der Computer muss mit dem Internet verbunden sein. Weiter mit Return. Bitte 1 -2 Minuten Geduld. Bitte kontrollieren ob in der Statuszeile ein blinkendes Icon zu sehen ist." -NoNewline
 
 net use x: "\\live.sysinternals.com\tools"
 Start-Process "x:\disk2vhd.exe" ('*','-c:\temp\theduke\snapshot.vhd')
