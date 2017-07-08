@@ -31,8 +31,13 @@ Onedrive deaktivieren
 HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive" -Name DisableFileSyncNGSC -value "1"
 https://www.deskmodder.de/wiki/index.php/OneDrive_beim_Start_deaktivieren_aktivieren_Windows_10
 
+Windows Explorer - Kontextmenu - neu reduzieren
+HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent\
+https://betanews.com/2016/03/02/windows-10-microsoft-consumer-experience/
 
+Windows Explorer einrichten
 
+https://www.ionas.com/wissen/der-navigationsbereich-im-windows-explorer-ganz-wie-sie-ihn-wollen/
 
 
 
