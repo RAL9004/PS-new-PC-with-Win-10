@@ -10,6 +10,10 @@ solitairecollection
 officehub
 bingsports
 
+Apps installieren?
+Die zu installierenden Apps sind in der Textdatei applikationen.csv gelistet.
+
+
 App Vorschläge verhindern
 #New-ItemProperty -Type DWord -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent\ -Name DisableWindowsConsumerFeatures -value "1"
 
