@@ -52,6 +52,8 @@ if(!$objSecPrinc.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Admini
   return;
 }
  . 
+$whereami = $(Get-Location).Path
+
 # Adminrechte sind vorhanden
 Write-Host "Du hast Administratorenrechte. Der Computer muss mit dem Internet verbunden sein. Weiter mit Return. Bitte 1 -2 Minuten Geduld. Bitte kontrollieren ob in der Statuszeile ein blinkendes Icon zu sehen ist." -NoNewline
 
