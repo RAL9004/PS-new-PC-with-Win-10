@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Erstes Skript zur Installation eines neuen Windows Computer
 .DESCRIPTION
@@ -51,23 +51,31 @@ if(!$objSecPrinc.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Admini
 	
   return;
 }
- . 
-$whereami = $(Get-Location).Path
 
 # Adminrechte sind vorhanden
-Write-Host "Du hast Administratorenrechte. Der Computer muss mit dem Internet verbunden sein. Weiter mit Return. Bitte 1 -2 Minuten Geduld. Bitte kontrollieren ob in der Statuszeile ein blinkendes Icon zu sehen ist." -NoNewline
+Write-Host "Das Skript läuft jetzt mit Admin Berechtigung. Der Computer muss mit dem Internet verbunden sein. Weiter mit Return. Bitte 1 -2 Minuten Geduld. Bitte kontrollieren ob in der Statuszeile ein blinkendes Icon zu sehen ist." + "`n"
 
+Write-host "Das SysInternals Lauferk im Internet wird jetzt als Laufwerk X: gemappt"
 net use x: "\\live.sysinternals.com\tools"
-Start-Process "x:\disk2vhd.exe" ('*','-c:\temp\theduke\snapshot.vhd')
+if (!(Test-Path x:\disk2vhd.exe)) {
+write-host "Es ist ein fehler aufgetreten. Der Zugriff auf das SysInternals Laufwerk schlug fehl."
+exit
+}
+
+write-host "Mit disk2vhd wird eine Kopie des Laufwerk C: in eine Datei gespeichert"
+mkdir "c:\temp\theduke" > $null
+Start-Process "x:\disk2vhd.exe" ('c:','c:\temp\theduke\snapshot.vhd')
 
 #USB Windows Creator Tool starten - Rettungsmedium auf USB Stick (min 16 GB) erstellen
+write-host "Für das Windows Rettungssystem einen USB Stick einstecken. Mindestens 16 GB. Auf dem Stick werden ALLE Daten gelöscht"
 C:\Windows\System32\RecoveryDrive.exe
  
 #eventlog und Computerinfos sichern
 get-eventlog application | Export-CSV $quelle\el-app.csv
 get-eventlog system | Export-CSV $quelle\el-sys.csv
 Get-EventLog security | Export-CSV $quelle\el-sec.csv
-Get-EventLog windows powershell | Export-CSV $quelle\el-wps.csv
+#Get-EventLog windows powershell | Export-CSV $quelle\el-wps.csv
+
 #eventlog löschen
 #wevtutil el | Foreach-Object {wevtutil cl "$_"}
 Clear-EventLog "application"
@@ -93,3 +101,9 @@ Checkpoint-Computer -Description "Sicherung vor der De-Installation"
 #$pfad = $env:USERPROFILE + "\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt"
 #del $pfad
 
+#$Invocation = (Get-Variable MyInvocation -Scope 1).Value
+#$skriptdir = Split-Path $Invocation.MyCommand.Path
+$global:skriptdir = $(Get-Location).Path
+write-host $skriptdir
+
+. $skriptdir\Part2-package-chocolatey.ps1

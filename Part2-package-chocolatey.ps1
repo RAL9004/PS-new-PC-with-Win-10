@@ -8,6 +8,8 @@
     Author     : Peter Gyger - 
 #>
 
+$whereami = $(Get-Location).Path
+
 #Modul zum restarten des Skriptes mit Admin Berechtigungen
 $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 $princ = New-Object System.Security.Principal.WindowsPrincipal($identity)
@@ -82,4 +84,6 @@ write-host choco install
 iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 choco feature enable -n allowGlobalConfirmation
 #cinst C:\temp\theduke\packages.config
-Install-Package C:\temp\theduke\packages.config
+Install-Package $whereami\packages.config
+
+. $whereami\Part3-settings.ps1
