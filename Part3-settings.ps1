@@ -29,7 +29,11 @@ if(!$princ.IsInRole( `
  return;
  }
 
-
+    #Defender Suche erweitern
+if (Test-Path HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/Windows Defender/) {
+    New-Item HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/Windows Defender/MpEngine
+    New-ItemProperty -Type DWord -Path HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/Windows Defender/MpEngine -Name MpEnablePus -value "1"
+    }
 exit 0
 
 #App Vorschläge verhindern
@@ -75,6 +79,33 @@ if (Test-Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent) {
     #New-ItemProperty -Type DWord -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent\ -Name DisableWindowsConsumerFeatures -value "1"
 }
 
+# Explorer - Dieser PC - Videos, Musik, Bilder ausblenden, da bereits in Bibliothek angezeigt
+    # Bilder Ordner ausblenden
+if (Test-Path HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{24ad3ad4-a569-4530-98e1-ab02f9417aa8}) {
+    write-host cloud-content existiert
+    Remove-Item HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{24ad3ad4-a569-4530-98e1-ab02f9417aa8}
+    }
 
+    # Dokumente Ordner ausblenden
+if (Test-Path HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{d3162b92-9365-467a-956b-92703aca08af}) {
+    write-host cloud-content existiert
+    Remove-Item HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{d3162b92-9365-467a-956b-92703aca08af}
+    }
+        
+# Explorer - Dieser PC - Videos, Musik, Bilder ausblenden, da bereits in Bibliothek angezeigt
+    # Bilder Ordner ausblenden
+if (Test-Path HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\"{24ad3ad4-a569-4530-98e1-ab02f9417aa8}") {
+    Remove-Item HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\"{24ad3ad4-a569-4530-98e1-ab02f9417aa8"
+    }
 
+    # Dokumente Ordner ausblenden
+if (Test-Path HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\"{d3162b92-9365-467a-956b-92703aca08af}") {
+    Remove-Item HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\"{d3162b92-9365-467a-956b-92703aca08af"
+    }
+
+    #Defender Suche erweitern
+if (Test-Path HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/Windows Defender/) {
+    New-Item HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/Windows Defender/MpEngine
+    New-ItemProperty -Type DWord -Path HKEY_LOCAL_MACHINE/Software/Policies/Microsoft/Windows Defender/MpEngine -Name MpEnablePus -value "1"
+    }
 
